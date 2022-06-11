@@ -1,12 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { Scanner } from './src/components/Scanner';
 
 export default function App() {
    return (
-      <View style={styles.container}>
-         <Text>Open up App.tsx to start working on your app!</Text>
-         <StatusBar style='auto' />
-      </View>
+      <Scanner />
+      // <View style={styles.container}>
+      //    <Text>Open up App.tsx to start working on your app!</Text>
+      //    <StatusBar style='auto' />
+      // </View>
    );
 }
 
