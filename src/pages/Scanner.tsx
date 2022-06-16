@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
-import { BarCodeScanner } from 'expo-barcode-scanner';
+import { BarCodeScannedCallback, BarCodeScanner } from 'expo-barcode-scanner';
 import { Button, StyleSheet, Text, View } from 'react-native';
 
-import { SafeView } from './SafeView';
+import { SafeView } from '../components/SafeView';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../App';
 
-export interface ScannerProps {}
+export type ScannerProps = NativeStackScreenProps<RootStackParamList, 'Scanner'>;
 
-export const Scanner = ({}: ScannerProps) => {
+export const Scanner = ({ navigation }: ScannerProps) => {
    const [hasPermission, setHasPermission] = useState<boolean | null>(null);
 
    const [scannedData, setScannedData] = useState({
@@ -23,9 +25,10 @@ export const Scanner = ({}: ScannerProps) => {
       })();
    }, []);
 
-   const handleBarCodeScanned = ({ type, data }: { type: string; data: string }) => {
+   const handleBarCodeScanned: BarCodeScannedCallback = ({ type, data }) => {
       setScanned(true);
       setScannedData({ data, type });
+      navigation.navigate('ScannedData', { data, type });
       // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
    };
 
@@ -36,12 +39,14 @@ export const Scanner = ({}: ScannerProps) => {
       return <Text>No access to camera</Text>;
    }
 
+   // TODO: Add expo camera to work correctly
+
    return (
       <SafeView backgroundColor='#4079bc'>
          <View style={styles.container}>
-            <View>
+            {/* <View>
                <Text style={styles.title}>Escanear</Text>
-            </View>
+            </View> */}
             <View style={styles.container}>
                <BarCodeScanner
                   onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
